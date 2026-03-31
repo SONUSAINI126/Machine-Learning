@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Complete Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ec;
+  --ink: #1a1714;
+  --ink2: #3d3830;
+  --ink3: #7a7060;
+  --surface: #edeae3;
+  --surface2: #e4e0d8;
+  --border: rgba(26,23,20,0.12);
+  --border2: rgba(26,23,20,0.22);
+  --a1: #c84b2f;   /* red-orange — main accent */
+  --a2: #2563a8;   /* blue — secondary */
+  --a3: #1a7a4a;   /* green — success/correct */
+  --a4: #9a5c00;   /* amber — warning */
+  --a5: #6b3fa0;   /* purple — formula/math */
+  --serif: 'Source Serif 4', Georgia, serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --display: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 240px;
+  height: 100vh;
+  background: var(--ink);
+  padding: 32px 0;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-logo span { display: block; font-size: 16px; color: #fff; letter-spacing: 0; margin-top: 4px; }
+
+.nav-section {
+  padding: 16px 0 0;
+}
+
+.nav-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 0 24px 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 24px;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #fff;
+  background: rgba(255,255,255,0.06);
+  border-left-color: var(--a1);
+}
+
+.nav-link .num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  min-width: 20px;
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: 240px;
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  padding: 80px 64px 72px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: 'ML';
+  position: absolute;
+  right: -20px;
+  top: -40px;
+  font-family: var(--display);
+  font-size: 280px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  user-select: none;
+}
+
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--a1);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero-sub {
+  color: rgba(255,255,255,0.45);
+  font-size: 15px;
+  font-style: italic;
+  max-width: 480px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.hero-meta-item { }
+.hero-meta-item .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 4px;
+}
+.hero-meta-item .value {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  padding: 0 64px 80px;
+}
+
+/* ── SECTION ── */
+.section {
+  padding-top: 72px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--a1);
+  background: rgba(200,75,47,0.1);
+  border: 1px solid rgba(200,75,47,0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+/* ── CARDS ── */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin: 16px 0;
+}
+
+.card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 10px;
+}
+
+.definition-box {
+  background: rgba(37,99,168,0.06);
+  border-left: 3px solid var(--a2);
+  border-radius: 0 8px 8px 0;
+  padding: 18px 22px;
+  margin: 20px 0;
+  font-size: 15.5px;
+}
+
+.definition-box strong { color: var(--a2); }
+
+.intuition-box {
+  background: rgba(200,75,47,0.05);
+  border: 1px solid rgba(200,75,47,0.2);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 16px 0;
+}
+
+.intuition-box .tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--a1);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.intuition-box .tag::before {
+  content: '';
+  width: 16px; height: 2px;
+  background: var(--a1);
+  display: inline-block;
+}
+
+.formula-block {
+  background: var(--ink);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.formula-block .formula-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.formula-block .formula-text {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: #f5f0e8;
+  letter-spacing: 0.3px;
+}
+
+.formula-block .formula-text .hl-red { color: #f87171; }
+.formula-block .formula-text .hl-blue { color: #93c5fd; }
+.formula-block .formula-text .hl-green { color: #6ee7b7; }
+.formula-block .formula-text .hl-yellow { color: #fcd34d; }
+
+pre.code-block {
+  background: var(--ink);
+  color: #d4cfbb;
+  font-family: var(--mono);
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 24px 26px;
+  overflow-x: auto;
+  line-height: 1.7;
+  margin: 16px 0;
+}
+.kw { color: #f87171; }
+.fn { color: #93c5fd; }
+.st { color: #fcd34d; }
+.cm { color: #6b7280; font-style: italic; }
+.nr { color: #6ee7b7; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+@media(max-width:700px){ .grid2,.grid3{ grid-template-columns:1fr; } .main{margin-left:0;} .sidebar{display:none;} .hero,.content{padding:32px 24px;} }
+
+.pill {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin: 2px 3px;
+  border: 1px solid;
+}
+.pill-red { background: rgba(200,75,47,0.1); color: var(--a1); border-color: rgba(200,75,47,0.3); }
+.pill-blue { background: rgba(37,99,168,0.1); color: var(--a2); border-color: rgba(37,99,168,0.3); }
+.pill-green { background: rgba(26,122,74,0.1); color: var(--a3); border-color: rgba(26,122,74,0.3); }
+.pill-amber { background: rgba(154,92,0,0.1); color: var(--a4); border-color: rgba(154,92,0,0.3); }
+.pill-purple { background: rgba(107,63,160,0.1); color: var(--a5); border-color: rgba(107,63,160,0.3); }
+
+.step-list { list-style: none; }
+.step-list li {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+  counter-increment: step;
+}
+.step-list { counter-reset: step; }
+.step-list li::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: var(--a1); background: rgba(200,75,47,0.1);
+  border: 1px solid rgba(200,75,47,0.25);
+  padding: 4px 8px; border-radius: 4px;
+  min-width: 40px; text-align: center; flex-shrink: 0; margin-top: 2px;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li .step-title { font-weight: 600; display: block; }
+.step-list li .step-desc { color: var(--ink2); font-size: 14.5px; margin-top: 2px; display: block; }
+
+ul.bl { padding-left: 20px; margin: 10px 0; }
+ul.bl li { margin-bottom: 7px; color: var(--ink2); }
+ul.bl li::marker { color: var(--a1); }
+
+table.neat {
+  width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0;
+}
+table.neat th {
+  background: var(--surface2); font-family: var(--mono); font-size: 11px;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--ink3);
+  padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border2);
+}
+table.neat td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top;
+}
+table.neat tr:hover td { background: rgba(0,0,0,0.02); }
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 48px 0 0;
+}
+
+h3 {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 24px 0 10px;
+}
+h4 {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--a5);
+  margin: 18px 0 8px;
+}
+p { margin-bottom: 12px; color: var(--ink2); font-size: 15.5px; }
+strong { color: var(--ink); }
+
+/* ── SVG DIAGRAMS ── */
+.diagram-wrap {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 20px 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+.diagram-caption {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink3);
+  text-align: center;
+  margin-top: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* ── ALERT BOXES ── */
+.alert {
+  border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-red { background: rgba(200,75,47,0.07); border: 1px solid rgba(200,75,47,0.2); }
+.alert-blue { background: rgba(37,99,168,0.07); border: 1px solid rgba(37,99,168,0.2); }
+.alert-green { background: rgba(26,122,74,0.07); border: 1px solid rgba(26,122,74,0.2); }
+.alert-amber { background: rgba(154,92,0,0.07); border: 1px solid rgba(154,92,0,0.2); }
+.alert-red .alert-icon { color: var(--a1); }
+.alert-blue .alert-icon { color: var(--a2); }
+.alert-green .alert-icon { color: var(--a3); }
+.alert-amber .alert-icon { color: var(--a4); }
+
+/* annotation table */
+.anno-table { width: 100%; font-size: 14px; border-collapse: collapse; margin: 8px 0; }
+.anno-table td { padding: 7px 12px; vertical-align: top; }
+.anno-table td:first-child {
+  font-family: var(--mono); font-size: 13px; color: var(--a5);
+  white-space: nowrap; width: 140px;
+  background: rgba(107,63,160,0.07); border-radius: 4px;
+}
+.anno-table tr { border-bottom: 1px solid var(--border); }
+.anno-table tr:last-child { border-bottom: none; }
+
+/* interactive GD */
+#gd-canvas { width: 100%; display: block; }
+.range-row { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; }
+.range-row label { font-family: var(--mono); font-size: 12px; color: var(--ink3); min-width: 130px; }
+.range-row input[type=range] { flex: 1; accent-color: var(--a1); }
+.range-row .val { font-family: var(--mono); font-size: 13px; color: var(--ink); min-width: 50px; text-align: right; }
+.gd-btn { font-family: var(--mono); font-size: 12px; padding: 7px 18px; border: 1px solid var(--border2); background: var(--ink); color: #fff; border-radius: 6px; cursor: pointer; margin-right: 8px; margin-top: 8px; transition: opacity 0.15s; }
+.gd-btn:hover { opacity: 0.8; }
+.gd-btn.outline { background: transparent; color: var(--ink); }
+
+/* ── WATERMARK ── */
+.watermark-fixed {
+  position: fixed;
+  bottom: 22px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(26,23,20,0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 30px;
+  padding: 7px 14px 7px 10px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.22);
+  user-select: none;
+}
+.watermark-fixed:hover {
+  background: rgba(37,99,168,0.92);
+  transform: translateY(-2px);
+}
+.watermark-fixed .wm-icon {
+  width: 22px; height: 22px;
+  background: #0a66c2;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.watermark-fixed .wm-icon svg { width: 14px; height: 14px; }
+.watermark-fixed .wm-text {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.watermark-fixed .wm-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  color: #ffffff; letter-spacing: 0.3px; line-height: 1;
+}
+.watermark-fixed .wm-handle {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.3px; line-height: 1;
+}
+.watermark-page {
+  position: fixed;
+  top: 0; left: 240px; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+.watermark-page-text {
+  position: absolute;
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(26,23,20,0.055);
+  letter-spacing: 2px;
+  transform: rotate(-35deg);
+  transform-origin: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">ML Notes<span>Machine Learning</span></div>
+  <div class="nav-section">
+    <div class="nav-label">Foundations</div>
+    <a href="#s1" class="nav-link"><span class="num">01</span>What is ML?</a>
+    <a href="#s2" class="nav-link"><span class="num">02</span>Types of ML</a>
+    <a href="#s3" class="nav-link"><span class="num">03</span>Supervised ML</a>
+    <a href="#s4" class="nav-link"><span class="num">04</span>Steps for ML</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Linear Regression</div>
+    <a href="#s5" class="nav-link"><span class="num">05</span>Scikit-Learn</a>
+    <a href="#s6" class="nav-link"><span class="num">06</span>Linear Regression</a>
+    <a href="#s7" class="nav-link"><span class="num">07</span>Cost Function</a>
+    <a href="#s8" class="nav-link"><span class="num">08</span>Gradient Descent</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Implementation</div>
+    <a href="#s9" class="nav-link"><span class="num">09</span>Insurance Dataset</a>
+    <a href="#s10" class="nav-link"><span class="num">10</span>Evaluation Metrics</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Complete Revision Notes</div>
+  <h1>Machine<br>Learning</h1>
+  <p class="hero-sub">Intuition-first approach — every concept explained with <em>why</em> before <em>how</em>. Linear Regression end-to-end.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Sections</div><div class="value">10</div></div>
+    <div class="hero-meta-item"><div class="label">Topic</div><div class="value">Linear Regression</div></div>
+    <div class="hero-meta-item"><div class="label">Level</div><div class="value">Foundations</div></div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 1 — WHAT IS ML
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">What is Machine Learning?</h2>
+  </div>
+
+  <div class="definition-box">
+    <strong>Machine Learning (ML)</strong> is a branch of Computer Science where we <em>teach computers to learn patterns from data and make decisions or predictions</em> — without being explicitly programmed for each task.
+  </div>
+
+  <div class="intuition-box">
+    <div class="tag">Intuition</div>
+    <p style="margin:0;font-size:15px;">Traditional programming: <em>you write the rules</em> → computer applies them. ML: <em>you give examples</em> → computer figures out the rules itself. Like teaching a child what a cat is by showing many photos, not by listing every rule about cats.</p>
+  </div>
+
+  <!-- Diagram: Traditional CS vs ML -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- LEFT: Traditional CS -->
+      <rect x="10" y="10" width="290" height="190" rx="10" fill="#f5f2ec" stroke="#1a1714" stroke-width="1"/>
+      <text x="155" y="34" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1714">Traditional Programming</text>
+
+      <rect x="40" y="48" width="100" height="32" rx="6" fill="#fff" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="90" y="69" text-anchor="middle" font-size="11" fill="#3d3830">Input data</text>
+
+      <rect x="40" y="106" width="100" height="32" rx="6" fill="#fff" stroke="#2563a8" stroke-width="1.5"/>
+      <text x="90" y="127" text-anchor="middle" font-size="11" fill="#2563a8">Logic / Rules</text>
+      <text x="155" y="127" text-anchor="start" font-size="10" fill="#7a7060" font-style="italic">← you write these</text>
+
+      <rect x="40" y="164" width="100" height="32" rx="6" fill="#fff" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="90" y="185" text-anchor="middle" font-size="11" fill="#3d3830">Output</text>
+
+      <line x1="90" y1="80" x2="90" y2="106" stroke="#3d3830" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="90" y1="138" x2="90" y2="164" stroke="#3d3830" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- RIGHT: ML -->
+      <rect x="360" y="10" width="290" height="190" rx="10" fill="#f5f2ec" stroke="#1a1714" stroke-width="1"/>
+      <text x="505" y="34" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1714">Machine Learning</text>
+
+      <rect x="390" y="48" width="100" height="32" rx="6" fill="#fff" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="440" y="64" text-anchor="middle" font-size="10" fill="#3d3830">Input data</text>
+      <text x="440" y="76" text-anchor="middle" font-size="10" fill="#7a7060">+ correct outputs</text>
+
+      <rect x="390" y="106" width="100" height="32" rx="6" fill="#fff" stroke="#c84b2f" stroke-width="1.5"/>
+      <text x="440" y="127" text-anchor="middle" font-size="11" fill="#c84b2f">ML Model</text>
+      <text x="498" y="127" text-anchor="start" font-size="10" fill="#7a7060" font-style="italic">← learns rules</text>
+
+      <rect x="390" y="164" width="100" height="32" rx="6" fill="#fff" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="440" y="185" text-anchor="middle" font-size="11" fill="#3d3830">Predictions</text>
+
+      <line x1="440" y1="80" x2="440" y2="106" stroke="#3d3830" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="440" y1="138" x2="440" y2="164" stroke="#3d3830" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- VS divider -->
+      <line x1="330" y1="30" x2="330" y2="190" stroke="#d1cbbf" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="311" y="95" width="38" height="22" rx="11" fill="#1a1714"/>
+      <text x="330" y="111" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">vs</text>
+    </svg>
+    <p class="diagram-caption">Key difference: In ML, the model discovers the rules (hypothesis) itself from data</p>
+  </div>
+
+  <h3>The ML Flow</h3>
+  <p>Once trained, the model acts like a function: give it new input → it predicts output using the patterns it learned.</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 80" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <rect x="10" y="18" width="110" height="40" rx="7" fill="#f5f2ec" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="65" y="43" text-anchor="middle" font-size="11" fill="#3d3830">Old i/p + o/p</text>
+      <line x1="120" y1="38" x2="158" y2="38" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="139" y="32" text-anchor="middle" font-size="9" fill="#7a7060">train</text>
+
+      <rect x="160" y="18" width="130" height="40" rx="7" fill="#c84b2f" stroke="#c84b2f" stroke-width="1"/>
+      <text x="225" y="43" text-anchor="middle" font-size="11" fill="#fff">Hypothesis (Model)</text>
+      <line x1="290" y1="38" x2="328" y2="38" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="310" y="32" text-anchor="middle" font-size="9" fill="#7a7060">new i/p</text>
+
+      <rect x="330" y="18" width="100" height="40" rx="7" fill="#f5f2ec" stroke="#3d3830" stroke-width="0.8"/>
+      <text x="380" y="38" text-anchor="middle" font-size="10" fill="#3d3830">Predicts</text>
+      <text x="380" y="52" text-anchor="middle" font-size="10" fill="#7a7060">new output</text>
+      <line x1="430" y1="38" x2="468" y2="38" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <rect x="470" y="18" width="110" height="40" rx="7" fill="#1a7a4a" stroke="#1a7a4a" stroke-width="1"/>
+      <text x="525" y="43" text-anchor="middle" font-size="11" fill="#fff">New Output ✓</text>
+    </svg>
+    <p class="diagram-caption">Training happens once → model is reused for all new predictions</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 2 — TYPES OF ML
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Types of Machine Learning</h2>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 280" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Root -->
+      <rect x="230" y="10" width="200" height="40" rx="8" fill="#1a1714" stroke="#1a1714"/>
+      <text x="330" y="35" text-anchor="middle" font-size="13" font-weight="600" fill="#fff">Machine Learning</text>
+
+      <!-- Branch lines -->
+      <line x1="330" y1="50" x2="110" y2="100" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <line x1="330" y1="50" x2="330" y2="100" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <line x1="330" y1="50" x2="550" y2="100" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- Supervised -->
+      <rect x="20" y="100" width="180" height="42" rx="8" fill="#2563a8" stroke="#2563a8"/>
+      <text x="110" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Supervised</text>
+      <text x="110" y="135" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.75)">Labelled data (i/p → o/p)</text>
+
+      <!-- Unsupervised -->
+      <rect x="240" y="100" width="180" height="42" rx="8" fill="#1a7a4a" stroke="#1a7a4a"/>
+      <text x="330" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Unsupervised</text>
+      <text x="330" y="135" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.75)">Unlabelled data</text>
+
+      <!-- Reinforcement -->
+      <rect x="460" y="100" width="180" height="42" rx="8" fill="#9a5c00" stroke="#9a5c00"/>
+      <text x="550" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Reinforcement</text>
+      <text x="550" y="135" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.75)">Goal + Rewards</text>
+
+      <!-- Supervised sub-branches -->
+      <line x1="85" y1="142" x2="65" y2="185" stroke="#2563a8" stroke-width="1" marker-end="url(#arr3)"/>
+      <line x1="135" y1="142" x2="155" y2="185" stroke="#2563a8" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <rect x="12" y="185" width="108" height="36" rx="7" fill="#eef3fb" stroke="#2563a8" stroke-width="1"/>
+      <text x="66" y="200" text-anchor="middle" font-size="11" fill="#2563a8" font-weight="600">Classification</text>
+      <text x="66" y="214" text-anchor="middle" font-size="10" fill="#3d3830">category output</text>
+
+      <rect x="128" y="185" width="108" height="36" rx="7" fill="#eef3fb" stroke="#2563a8" stroke-width="1"/>
+      <text x="182" y="200" text-anchor="middle" font-size="11" fill="#2563a8" font-weight="600">Regression</text>
+      <text x="182" y="214" text-anchor="middle" font-size="10" fill="#3d3830">continuous output</text>
+
+      <!-- Unsupervised details -->
+      <rect x="250" y="168" width="160" height="22" rx="5" fill="#e6f4ee" stroke="#1a7a4a" stroke-width="0.8"/>
+      <text x="330" y="183" text-anchor="middle" font-size="10" fill="#1a7a4a">→ Clustering (grouping)</text>
+      <rect x="250" y="195" width="160" height="22" rx="5" fill="#e6f4ee" stroke="#1a7a4a" stroke-width="0.8"/>
+      <text x="330" y="210" text-anchor="middle" font-size="10" fill="#1a7a4a">e.g. customer segments</text>
+
+      <!-- Reinforcement details -->
+      <rect x="468" y="168" width="160" height="22" rx="5" fill="#fdf3e3" stroke="#9a5c00" stroke-width="0.8"/>
+      <text x="548" y="183" text-anchor="middle" font-size="10" fill="#9a5c00">→ Rewards / Penalties</text>
+      <rect x="468" y="195" width="160" height="22" rx="5" fill="#fdf3e3" stroke="#9a5c00" stroke-width="0.8"/>
+      <text x="548" y="210" text-anchor="middle" font-size="10" fill="#9a5c00">e.g. games, robotics</text>
+
+      <!-- Classification sub -->
+      <text x="20" y="248" font-size="10" fill="#7a7060">Binary: Spam/Not spam</text>
+      <text x="20" y="262" font-size="10" fill="#7a7060">Multi-class: Cat/Dog/Rabbit</text>
+      <text x="20" y="276" font-size="10" fill="#7a7060">Multi-label: Movie → Action+Fun</text>
+    </svg>
+    <p class="diagram-caption">Three main paradigms of Machine Learning</p>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label">Supervised Learning</div>
+      <ul class="bl">
+        <li>Data is <strong>labelled</strong> — every input has a known correct output</li>
+        <li>Model learns mapping: X → Y</li>
+        <li>Two types: Classification &amp; Regression</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="pill pill-blue">Spam detection</span><span class="pill pill-blue">House prices</span></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Unsupervised Learning</div>
+      <ul class="bl">
+        <li>Data is <strong>unlabelled</strong> — no correct answers given</li>
+        <li>Model discovers hidden patterns</li>
+        <li>Main task: Clustering</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="pill pill-green">Customer segments</span><span class="pill pill-green">Anomaly detection</span></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Reinforcement Learning</div>
+      <ul class="bl">
+        <li>Agent <strong>interacts</strong> with environment</li>
+        <li>Gets rewards (good) or penalties (bad)</li>
+        <li>Learns optimal strategy over time</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="pill pill-amber">AlphaGo</span><span class="pill pill-amber">Self-driving</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 3 — SUPERVISED ML
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Supervised ML — Features &amp; Labels</h2>
+  </div>
+
+  <p>In supervised ML, your dataset has <strong>features (X)</strong> — the inputs — and a <strong>label (Y)</strong> — the output you want to predict. The model learns the function X → Y.</p>
+
+  <!-- Feature Table Diagram -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 170" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- Header row -->
+      <rect x="10" y="10" width="570" height="32" rx="0" fill="#1a1714"/>
+      <text x="86" y="31" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">Email Text</text>
+      <text x="200" y="31" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">Sender Email</text>
+      <text x="300" y="31" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">Has Link?</text>
+      <text x="400" y="31" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">Exclamations?</text>
+      <rect x="480" y="10" width="100" height="32" rx="0" fill="#c84b2f"/>
+      <text x="530" y="31" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Label (Y)</text>
+      <!-- Row 1 -->
+      <rect x="10" y="42" width="570" height="28" fill="#fafaf8"/>
+      <text x="86" y="61" text-anchor="middle" font-size="10" fill="#3d3830">Win a prize now!</text>
+      <text x="200" y="61" text-anchor="middle" font-size="10" fill="#3d3830">promo@win.com</text>
+      <text x="300" y="61" text-anchor="middle" font-size="10" fill="#3d3830">Yes</text>
+      <text x="400" y="61" text-anchor="middle" font-size="10" fill="#3d3830">Yes</text>
+      <text x="530" y="61" text-anchor="middle" font-size="10" font-weight="600" fill="#c84b2f">SPAM</text>
+      <!-- Row 2 -->
+      <rect x="10" y="70" width="570" height="28" fill="#fff"/>
+      <text x="86" y="89" text-anchor="middle" font-size="10" fill="#3d3830">Meeting at 3pm</text>
+      <text x="200" y="89" text-anchor="middle" font-size="10" fill="#3d3830">boss@company.com</text>
+      <text x="300" y="89" text-anchor="middle" font-size="10" fill="#3d3830">No</text>
+      <text x="400" y="89" text-anchor="middle" font-size="10" fill="#3d3830">No</text>
+      <text x="530" y="89" text-anchor="middle" font-size="10" font-weight="600" fill="#1a7a4a">NOT SPAM</text>
+      <!-- Row 3 -->
+      <rect x="10" y="98" width="570" height="28" fill="#fafaf8"/>
+      <text x="86" y="117" text-anchor="middle" font-size="10" fill="#3d3830">Cheap meds sale</text>
+      <text x="200" y="117" text-anchor="middle" font-size="10" fill="#3d3830">deals@rx99.net</text>
+      <text x="300" y="117" text-anchor="middle" font-size="10" fill="#3d3830">Yes</text>
+      <text x="400" y="117" text-anchor="middle" font-size="10" fill="#3d3830">Yes</text>
+      <text x="530" y="117" text-anchor="middle" font-size="10" font-weight="600" fill="#c84b2f">SPAM</text>
+      <!-- Border -->
+      <rect x="10" y="10" width="570" height="116" fill="none" stroke="#d1cbbf" stroke-width="1"/>
+      <line x1="150" y1="10" x2="150" y2="126" stroke="#d1cbbf" stroke-width="0.8"/>
+      <line x1="250" y1="10" x2="250" y2="126" stroke="#d1cbbf" stroke-width="0.8"/>
+      <line x1="350" y1="10" x2="350" y2="126" stroke="#d1cbbf" stroke-width="0.8"/>
+      <line x1="450" y1="10" x2="450" y2="126" stroke="#d1cbbf" stroke-width="0.8"/>
+      <line x1="480" y1="10" x2="480" y2="126" stroke="#c84b2f" stroke-width="1"/>
+      <!-- Labels below -->
+      <rect x="10" y="132" width="468" height="20" rx="4" fill="rgba(37,99,168,0.08)" stroke="rgba(37,99,168,0.25)" stroke-width="0.8"/>
+      <text x="235" y="146" text-anchor="middle" font-size="10" fill="#2563a8">← Features X (Independent variables — what we give the model)</text>
+      <rect x="482" y="132" width="98" height="20" rx="4" fill="rgba(200,75,47,0.1)" stroke="rgba(200,75,47,0.25)" stroke-width="0.8"/>
+      <text x="531" y="146" text-anchor="middle" font-size="10" fill="#c84b2f">Label Y (target)</text>
+    </svg>
+    <p class="diagram-caption">Supervised learning dataset: each row is one training example. Model learns to predict Y from X.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Classification — Category Output</div>
+      <p style="margin-bottom:8px;">Output is one of several <strong>discrete classes</strong>.</p>
+      <ul class="bl">
+        <li><strong>Binary (2 classes):</strong> Spam / Not spam, Malignant / Benign</li>
+        <li><strong>Multi-class (3+ exclusive):</strong> Cat / Dog / Rabbit</li>
+        <li><strong>Multi-label (multiple tags):</strong> Movie → Action AND Funny</li>
+      </ul>
+      <div class="intuition-box" style="margin-top:10px;">
+        <div class="tag">Why?</div>
+        <p style="margin:0;font-size:13.5px;">Use classification when the answer is a bucket, not a number. "Will this customer churn?" = Yes/No = Classification.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Regression — Continuous Output</div>
+      <p style="margin-bottom:8px;">Output is a <strong>continuous number</strong> on a scale.</p>
+      <ul class="bl">
+        <li>House price prediction</li>
+        <li>Stock price tomorrow</li>
+        <li>Age estimation from image</li>
+        <li>Insurance charges</li>
+      </ul>
+      <div class="intuition-box" style="margin-top:10px;">
+        <div class="tag">Why?</div>
+        <p style="margin:0;font-size:13.5px;">Use regression when the answer is a number. "How much will this house sell for?" = ₹X = Regression.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 4 — STEPS FOR ML
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Steps for Building an ML Model</h2>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 80" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- boxes -->
+      <rect x="10" y="16" width="130" height="46" rx="8" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="75" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#1a1714">Data Prep</text>
+      <text x="75" y="52" text-anchor="middle" font-size="9" fill="#7a7060">+ Feature Eng.</text>
+
+      <line x1="140" y1="39" x2="162" y2="39" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr4)"/>
+
+      <rect x="163" y="16" width="110" height="46" rx="8" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="218" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#1a1714">Select Model</text>
+      <text x="218" y="52" text-anchor="middle" font-size="9" fill="#7a7060">algorithm choice</text>
+
+      <line x1="273" y1="39" x2="295" y2="39" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr4)"/>
+
+      <rect x="296" y="16" width="110" height="46" rx="8" fill="#c84b2f" stroke="#c84b2f"/>
+      <text x="351" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Train / Test</text>
+      <text x="351" y="52" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.75)">fit the model</text>
+
+      <line x1="406" y1="39" x2="428" y2="39" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr4)"/>
+
+      <rect x="429" y="16" width="110" height="46" rx="8" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="484" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#1a1714">Evaluate</text>
+      <text x="484" y="52" text-anchor="middle" font-size="9" fill="#7a7060">metrics</text>
+
+      <line x1="539" y1="39" x2="561" y2="39" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr4)"/>
+
+      <rect x="562" y="16" width="90" height="46" rx="8" fill="#1a7a4a" stroke="#1a7a4a"/>
+      <text x="607" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Tune /</text>
+      <text x="607" y="52" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Deploy</text>
+    </svg>
+    <p class="diagram-caption">ML pipeline — each step feeds into the next; evaluation may loop back to tuning</p>
+  </div>
+
+  <ul class="step-list">
+    <li>
+      <div>
+        <span class="step-title">Data Pre-processing + Feature Engineering</span>
+        <span class="step-desc">Clean data, handle missing values, encode categorical variables (Label Encoding, One-Hot), normalise/scale features. <em>Rule:</em> No → 0, Yes → 1. This step directly impacts model quality.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <span class="step-title">Select Model</span>
+        <span class="step-desc">Choose algorithm based on problem type (Classification? Regression?), data size, interpretability needs. Linear Regression for continuous output, Logistic for binary classification, etc.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <span class="step-title">Train / Test (model.fit)</span>
+        <span class="step-desc">Split data: typically 80% training, 20% testing. Train on training set. Evaluate on test set (unseen data) to check real-world performance.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <span class="step-title">Underfit / Overfit Analysis</span>
+        <span class="step-desc"><strong>Underfit:</strong> model too simple, high error on both train and test (high bias). <strong>Overfit:</strong> model memorised training data, low train error but high test error (high variance). Goal: find the sweet spot.</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 5 — SCIKIT-LEARN
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Scikit-Learn (sklearn)</h2>
+  </div>
+
+  <div class="definition-box">
+    <strong>Scikit-Learn</strong> is Python's most popular ML library. It provides ready-to-use implementations of all major ML algorithms with a consistent API: <code>model.fit(X, y)</code> to train, <code>model.predict(X)</code> to predict.
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Why Scikit-Learn?</div>
+      <ul class="bl">
+        <li>Well documented, easy to learn</li>
+        <li>Works seamlessly with NumPy &amp; Pandas</li>
+        <li>Used by professionals and beginners</li>
+        <li>Consistent API across all algorithms</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Setup</div>
+      <pre class="code-block" style="margin:0;font-size:12px;border-radius:6px;">python -m venv sklearn-env
+<span class="cm"># Activate (Windows)</span>
+sklearn-env\Scripts\activate
+<span class="cm"># Install</span>
+pip install -U scikit-learn</pre>
+    </div>
+  </div>
+
+  <h3>Algorithms at a Glance</h3>
+  <table class="neat">
+    <thead><tr><th>Algorithm</th><th>Type</th><th>Key Use</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>Linear Regression</td><td><span class="pill pill-blue">Regression</span></td><td>Predict continuous values</td><td>Number</td></tr>
+      <tr><td>Logistic Regression</td><td><span class="pill pill-red">Classification</span></td><td>Binary / multi-class</td><td>Class</td></tr>
+      <tr><td>KNN</td><td><span class="pill pill-purple">Both</span></td><td>Instance-based, k nearest</td><td>Class/Number</td></tr>
+      <tr><td>Decision Trees</td><td><span class="pill pill-purple">Both</span></td><td>Rule-based, interpretable</td><td>Class/Number</td></tr>
+      <tr><td>SVM</td><td><span class="pill pill-purple">Both</span></td><td>Max-margin hyperplane</td><td>Class/Number</td></tr>
+      <tr><td>Naïve Bayes</td><td><span class="pill pill-red">Classification</span></td><td>Probabilistic, text</td><td>Class</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 6 — LINEAR REGRESSION
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Linear Regression — Deep Dive</h2>
+  </div>
+
+  <div class="definition-box">
+    <strong>Linear Regression</strong> finds the single <em>best-fit straight line</em> through your data points that minimises prediction errors. Used for predicting continuous numerical outputs.
+  </div>
+
+  <div class="intuition-box">
+    <div class="tag">Intuition first</div>
+    <p style="margin:0;font-size:15px;">Imagine plotting study hours (X) vs exam score (Y). Some points are scattered. Linear Regression finds the ONE line that is "closest" to all points simultaneously — so you can predict score for any new study hour value.</p>
+  </div>
+
+  <!-- Best Fit Line Diagram — CORRECT -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 270" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Axes -->
+      <line x1="55" y1="230" x2="360" y2="230" stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr5)"/>
+      <line x1="55" y1="230" x2="55" y2="20" stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr5)"/>
+      <text x="368" y="234" font-size="12" fill="#3d3830">x</text>
+      <text x="48" y="16" text-anchor="end" font-size="12" fill="#3d3830">y</text>
+
+      <!-- Axis ticks -->
+      <text x="47" y="234" text-anchor="end" font-size="9" fill="#7a7060">0</text>
+      <text x="55" y="252" text-anchor="start" font-size="9" fill="#7a7060">Hours studied →</text>
+      <text x="10" y="130" text-anchor="middle" font-size="9" fill="#7a7060" transform="rotate(-90,12,130)">Score →</text>
+
+      <!-- Data points (actual y values) — scattered around the line -->
+      <circle cx="85"  cy="198" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="115" cy="178" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="145" cy="158" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="175" cy="130" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="205" cy="122" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="235" cy="100" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="265" cy="82"  r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="295" cy="62"  r="5" fill="#2563a8" opacity="0.85"/>
+      <!-- Intentional scatter: some points off the line -->
+      <circle cx="100" cy="210" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="160" cy="140" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="220" cy="108" r="5" fill="#2563a8" opacity="0.85"/>
+      <circle cx="280" cy="72"  r="5" fill="#2563a8" opacity="0.85"/>
+
+      <!-- Best fit line: goes from bottom-left to top-right (positive slope) -->
+      <line x1="68" y1="218" x2="320" y2="55" stroke="#c84b2f" stroke-width="2.2"/>
+      <text x="298" y="48" font-size="11" fill="#c84b2f" font-weight="600">Best-fit line</text>
+      <text x="298" y="62" font-size="10" fill="#c84b2f">y = mx + c</text>
+
+      <!-- Residual lines (dashed) showing error -->
+      <line x1="175" y1="130" x2="175" y2="149" stroke="#9a5c00" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <circle cx="175" cy="149" r="4" fill="#c84b2f" opacity="0.5"/>
+
+      <line x1="235" y1="100" x2="235" y2="113" stroke="#9a5c00" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <circle cx="235" cy="113" r="4" fill="#c84b2f" opacity="0.5"/>
+
+      <line x1="115" y1="178" x2="115" y2="189" stroke="#9a5c00" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <circle cx="115" cy="189" r="4" fill="#c84b2f" opacity="0.5"/>
+
+      <!-- Labels for residual -->
+      <text x="245" y="108" font-size="9" fill="#9a5c00">← ŷ (predicted)</text>
+      <text x="185" y="140" font-size="9" fill="#2563a8">← y (actual)</text>
+      <text x="258" y="122" font-size="9" fill="#9a5c00" font-style="italic">residual</text>
+      <line x1="256" y1="119" x2="242" y2="111" stroke="#9a5c00" stroke-width="0.8" marker-end="url(#arr5)"/>
+
+      <!-- Right panel: terminology -->
+      <rect x="385" y="14" width="265" height="220" rx="10" fill="#f5f2ec" stroke="#d1cbbf" stroke-width="1"/>
+      <text x="517" y="38" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1714">Terminology</text>
+
+      <line x1="400" y1="46" x2="635" y2="46" stroke="#d1cbbf" stroke-width="0.8"/>
+
+      <text x="400" y="64" font-size="11" fill="#c84b2f" font-weight="600">y = mx + c</text>
+      <text x="400" y="80" font-size="10" fill="#3d3830">m = slope (steepness)</text>
+      <text x="400" y="95" font-size="10" fill="#3d3830">c = intercept (where line hits y-axis)</text>
+
+      <line x1="400" y1="106" x2="635" y2="106" stroke="#d1cbbf" stroke-width="0.5" stroke-dasharray="3,2"/>
+
+      <text x="400" y="122" font-size="11" fill="#6b3fa0" font-weight="600">hθ(x) = θ₀ + θ₁x</text>
+      <text x="400" y="138" font-size="10" fill="#3d3830">θ₀ = bias / intercept</text>
+      <text x="400" y="153" font-size="10" fill="#3d3830">θ₁ = weight / coefficient</text>
+
+      <line x1="400" y1="164" x2="635" y2="164" stroke="#d1cbbf" stroke-width="0.5" stroke-dasharray="3,2"/>
+
+      <text x="400" y="180" font-size="11" fill="#9a5c00" font-weight="600">Error = y − ŷ</text>
+      <text x="400" y="196" font-size="10" fill="#3d3830">y = actual value</text>
+      <text x="400" y="211" font-size="10" fill="#3d3830">ŷ = predicted by line</text>
+      <text x="400" y="226" font-size="10" fill="#3d3830">Residual = y − ŷ</text>
+    </svg>
+    <p class="diagram-caption">Best-fit line has POSITIVE slope: as x (hours) increases, y (score) increases. Residual = vertical gap between actual point and line.</p>
+  </div>
+
+  <h3>Hypothesis Function (Full Form)</h3>
+  <p>For multiple features (Multiple Linear Regression):</p>
+
+  <div class="formula-block">
+    <div class="formula-label">Hypothesis Function</div>
+    <div class="formula-text">
+      <span class="hl-blue">hθ(x)</span> = <span class="hl-yellow">θ₀</span> + <span class="hl-red">θ₁</span>x₁ + <span class="hl-red">θ₂</span>x₂ + ... + <span class="hl-red">θₙ</span>xₙ
+    </div>
+  </div>
+
+  <table class="anno-table" style="margin:16px 0;">
+    <tr><td>hθ(x)</td><td>The model's prediction (same as ŷ). Reads as "h sub theta of x"</td></tr>
+    <tr><td>θ₀ (theta-0)</td><td><strong>Bias / Intercept</strong> — the y-intercept. Value of prediction when all x = 0. It's the baseline.</td></tr>
+    <tr><td>θ₁…θₙ</td><td><strong>Weights / Coefficients</strong> — how much each feature contributes. Larger θ₁ = feature x₁ matters more.</td></tr>
+    <tr><td>x₁…xₙ</td><td><strong>Features</strong> — your input variables (age, BMI, salary, etc.)</td></tr>
+  </table>
+
+  <div class="intuition-box">
+    <div class="tag">Why these symbols?</div>
+    <p style="margin:0;font-size:14.5px;">θ (theta) are the <em>parameters the model learns</em>. During training, gradient descent adjusts these θ values until predictions are as accurate as possible. After training, θ values are fixed and used for all new predictions.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 7 — COST FUNCTION
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Cost Function — Measuring Error</h2>
+  </div>
+
+  <div class="definition-box">
+    <strong>Cost Function J(θ)</strong> measures <em>how wrong the model's predictions are overall</em>. It takes all the prediction errors, squares them, and averages. Lower J(θ) = better model. Goal of training = minimise J(θ).
+  </div>
+
+  <div class="intuition-box">
+    <div class="tag">Why do we need it?</div>
+    <p style="margin:0;font-size:15px;">The model has infinite possible lines it could draw. The cost function gives us a single number to judge "how bad is this line?" — so we can compare lines and find the best one. Without J(θ), we'd have no way to know if θ₁=2 is better than θ₁=3.</p>
+  </div>
+
+  <h3>Mean Squared Error (MSE)</h3>
+
+  <div class="formula-block">
+    <div class="formula-label">Cost Function — MSE</div>
+    <div class="formula-text">
+      <span class="hl-blue">J(θ)</span> = <span class="hl-yellow">1/(2m)</span> · Σᵢ (<span class="hl-red">hθ(xⁱ)</span> − <span class="hl-green">yⁱ</span>)²
+    </div>
+  </div>
+
+  <table class="anno-table" style="margin:16px 0;">
+    <tr><td>J(θ)</td><td>Total cost — the number we want to minimise</td></tr>
+    <tr><td>m</td><td>Number of training examples</td></tr>
+    <tr><td>hθ(xⁱ)</td><td>Model's prediction for example i</td></tr>
+    <tr><td>yⁱ</td><td>Actual true label for example i</td></tr>
+    <tr><td>(hθ − y)²</td><td>Squared error — penalises large errors more than small ones</td></tr>
+    <tr><td>1/(2m)</td><td>1/m = average; extra ÷2 makes derivative cleaner (cancels the 2 from squaring)</td></tr>
+  </table>
+
+  <div class="alert alert-blue">
+    <span class="alert-icon">◆</span>
+    <div><strong>Why square the error?</strong> If you just summed (hθ − y), positive and negative errors would cancel out (−5 + 5 = 0, looks perfect but isn't). Squaring makes all errors positive AND punishes big errors extra hard: error of 10 becomes 100, but error of 2 becomes only 4.</div>
+  </div>
+
+  <!-- Cost Function Curve — CORRECT upward bowl -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Axes -->
+      <line x1="55" y1="220" x2="370" y2="220" stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <line x1="55" y1="220" x2="55" y2="20"  stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="378" y="224" font-size="12" fill="#3d3830">θ₁</text>
+      <text x="48" y="16" text-anchor="end" font-size="12" fill="#3d3830">J(θ)</text>
+
+      <!-- CORRECT: Parabola opening UPWARD (bowl shape) — minimum at BOTTOM -->
+      <!-- Parabola: J = k*(theta - theta_opt)^2, centered at theta=213, min y=216 -->
+      <!-- Using quadratic: at x=55, J=220-24=196? Let me compute points:
+           center_x=213, min_y=216 (just above axis)
+           y = min_y - scale*(x-center_x)^2 ... wait, opens upward means y = min_y + scale*(x-cx)^2
+           at cx=213: y=216 (minimum, high on canvas = low cost)
+           Actually on SVG, y increases downward. Min cost = lowest y number = TOP of curve? No.
+           We want min cost at BOTTOM of bowl visually. In SVG: bottom = high y value.
+           So: y = min_y_svg - curve_height + scale*(x-cx)^2 ... 
+           Bowl bottom at y=210 (near axis), sides go UP (lower y in SVG)
+           y_svg = 210 - a*(x - 213)^2   but that opens DOWNWARD in SVG coords
+           For UPWARD bowl (minimum at bottom): y_svg = 60 + a*(x - 213)^2
+           at cx=213: y=60 (TOP of canvas) - NO, minimum should be near bottom
+
+           Let me be explicit:
+           Bowl opening upward in MATH = as you move away from optimal theta, cost INCREASES
+           In SVG: cost axis Y goes UP = lower SVG y value
+           So higher cost = smaller SVG y = higher on screen
+           Minimum cost = largest SVG y = at BOTTOM of diagram near x-axis
+           
+           Parabola: y_svg = bottom_of_curve - a*(x-cx)^2
+           This has minimum (largest y_svg) at cx, goes to smaller y_svg as we move away = CORRECT BOWL UPWARD
+           
+           y_svg = 212 - 0.0014*(x-213)^2
+           at x=213: y=212 ✓ (near bottom)
+           at x=55:  y=212-0.0014*(158)^2 = 212-35 = 177
+           at x=370: y=212-0.0014*(157)^2 = 212-34.5 = 177.5
+
+           This gives us correct bowl: widest at bottom (minimum), curves up on both sides
+      -->
+      <path d="M70,177 C100,190 140,205 180,211 C200,213 213,214 213,214 C225,214 250,212 280,208 C310,202 340,192 360,178"
+            fill="none" stroke="#c84b2f" stroke-width="2.2"/>
+
+      <!-- Minimum point at bottom of bowl -->
+      <circle cx="213" cy="214" r="6" fill="#1a7a4a" stroke="#fff" stroke-width="2"/>
+      <line x1="213" y1="214" x2="213" y2="220" stroke="#1a7a4a" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <text x="213" y="236" text-anchor="middle" font-size="10" fill="#1a7a4a" font-weight="600">θ_optimal</text>
+      <text x="213" y="248" text-anchor="middle" font-size="10" fill="#1a7a4a">J(θ) minimum</text>
+
+      <!-- Left side: high cost -->
+      <circle cx="90" cy="188" r="5" fill="#c84b2f"/>
+      <text x="78" y="182" font-size="9" fill="#c84b2f" text-anchor="end">high</text>
+      <text x="78" y="193" font-size="9" fill="#c84b2f" text-anchor="end">cost</text>
+
+      <!-- Right side: high cost -->
+      <circle cx="340" cy="188" r="5" fill="#c84b2f"/>
+      <text x="352" y="182" font-size="9" fill="#c84b2f">high</text>
+      <text x="352" y="193" font-size="9" fill="#c84b2f">cost</text>
+
+      <!-- J(θ) label on curve -->
+      <text x="68" y="160" font-size="11" fill="#7a7060" font-style="italic">J(θ) ↑</text>
+      <text x="68" y="173" font-size="9" fill="#7a7060">cost</text>
+      <text x="68" y="184" font-size="9" fill="#7a7060">rises</text>
+
+      <!-- Right panel: examples -->
+      <rect x="400" y="14" width="250" height="215" rx="10" fill="#f5f2ec" stroke="#d1cbbf" stroke-width="1"/>
+      <text x="525" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1714">Numerical Example</text>
+      <text x="415" y="52" font-size="10" fill="#7a7060">Data: (1,2) (2,4) (3,6)</text>
+
+      <line x1="415" y1="62" x2="635" y2="62" stroke="#d1cbbf" stroke-width="0.8"/>
+
+      <text x="415" y="80" font-size="10" fill="#1a7a4a" font-weight="600">Case 1: θ₀=0, θ₁=2</text>
+      <text x="415" y="96" font-size="10" fill="#3d3830">hθ(1)=2, hθ(2)=4, hθ(3)=6</text>
+      <text x="415" y="112" font-size="10" fill="#3d3830">Errors: 0, 0, 0</text>
+      <text x="415" y="128" font-size="10" fill="#1a7a4a" font-weight="600">J(θ) = 0  ✓ Perfect!</text>
+
+      <line x1="415" y1="138" x2="635" y2="138" stroke="#d1cbbf" stroke-width="0.5" stroke-dasharray="3,2"/>
+
+      <text x="415" y="156" font-size="10" fill="#9a5c00" font-weight="600">Case 2: θ₀=0, θ₁=1</text>
+      <text x="415" y="172" font-size="10" fill="#3d3830">hθ(1)=1, hθ(2)=2, hθ(3)=3</text>
+      <text x="415" y="188" font-size="10" fill="#3d3830">Errors: 1², 2², 3²</text>
+      <text x="415" y="204" font-size="10" fill="#c84b2f" font-weight="600">J(θ) = ⅙(1+4+9) = 2.33</text>
+      <text x="415" y="220" font-size="10" fill="#7a7060" font-style="italic">← worse line, higher cost</text>
+    </svg>
+    <p class="diagram-caption">Cost function J(θ) is a BOWL opening upward — minimum is at the BOTTOM. Our goal is to reach that bottom point.</p>
+  </div>
+
+  <div class="alert alert-green">
+    <span class="alert-icon">✓</span>
+    <div><strong>Key insight:</strong> For every combination of (θ₀, θ₁), there's one J(θ) value. The cost function is like a landscape of hills and valleys. We want to find the lowest valley = minimum J(θ) = best model.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 8 — GRADIENT DESCENT
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Gradient Descent — Finding the Minimum</h2>
+  </div>
+
+  <div class="definition-box">
+    <strong>Gradient Descent</strong> is an iterative optimisation algorithm that minimises the cost function J(θ) by repeatedly adjusting the parameters θ in the direction of steepest descent (downhill).
+  </div>
+
+  <div class="intuition-box">
+    <div class="tag">Real-world Intuition</div>
+    <p style="margin:0;font-size:15px;">Imagine you're blindfolded on a hilly mountain and want to reach the lowest valley. Your strategy: feel the slope under your feet → take a step in whichever direction goes downhill → repeat. Eventually you'll reach the bottom. <em>That's exactly what gradient descent does with J(θ).</em></p>
+  </div>
+
+  <!-- CORRECT GRADIENT DESCENT DIAGRAM -->
+  <!-- Bowl opens upward. Minimum at BOTTOM. 
+       LEFT side of bowl: slope is NEGATIVE (line goes down-right toward minimum)
+       RIGHT side of bowl: slope is POSITIVE (line goes up-right away from minimum)
+       
+       Wait — let me think carefully about tangent slopes on a UPWARD bowl:
+       - Left side of bowl: as x increases, y decreases → slope = dy/dx < 0 → NEGATIVE
+       - Right side of bowl: as x increases, y increases → slope = dy/dx > 0 → POSITIVE
+       
+       Update rule: θ = θ - α * (slope)
+       - On RIGHT side (slope +ve): θ - α*(+ve) = θ decreases → moves LEFT toward minimum ✓
+       - On LEFT side (slope -ve): θ - α*(-ve) = θ + something = θ increases → moves RIGHT toward minimum ✓
+       
+       This is mathematically CORRECT.
+  -->
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 270" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Axes -->
+      <line x1="50" y1="225" x2="390" y2="225" stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="50" y1="225" x2="50"  y2="20"  stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <text x="398" y="229" font-size="12" fill="#3d3830">θ</text>
+      <text x="44"  y="16"  text-anchor="end" font-size="12" fill="#3d3830">J(θ)</text>
+
+      <!-- Upward bowl (same formula as section 7) -->
+      <!-- center at x=220, min_y_svg=218 (at bottom, near axis), bowl goes up on both sides -->
+      <path d="M68,195 C90,208 130,218 170,222 C195,224 208,225 220,225 C232,225 245,224 270,222 C310,218 350,208 372,195"
+            fill="none" stroke="#1a1714" stroke-width="2"/>
+
+      <!-- Global minimum -->
+      <circle cx="220" cy="225" r="7" fill="#1a7a4a" stroke="#fff" stroke-width="2"/>
+      <text x="220" y="246" text-anchor="middle" font-size="10" fill="#1a7a4a" font-weight="600">minimum</text>
+
+      <!-- ── LEFT SIDE (slope is NEGATIVE) ── -->
+      <!-- Point on left side -->
+      <circle cx="105" cy="216" r="6" fill="#c84b2f" stroke="#fff" stroke-width="1.5"/>
+      <text x="90" y="210" font-size="10" fill="#c84b2f" text-anchor="end">start A</text>
+
+      <!-- Tangent on left side: slope is NEGATIVE (goes down-right) -->
+      <!-- At x=105, the bowl is descending toward minimum as x increases, so slope = negative -->
+      <!-- Tangent line going down-right (from upper-left to lower-right) -->
+      <line x1="76" y1="222" x2="140" y2="210" stroke="#9a5c00" stroke-width="1.8"/>
+      <!-- Label the slope -->
+      <text x="65" y="240" font-size="9" fill="#9a5c00">slope = −ve</text>
+      <text x="55" y="253" font-size="9" fill="#9a5c00">(going down-right)</text>
+
+      <!-- Arrow showing θ moves RIGHT (increases) when slope is -ve -->
+      <path d="M112,215 C145,220 175,224 210,225" fill="none" stroke="#c84b2f" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arr7)"/>
+      <text x="155" y="210" font-size="9" fill="#c84b2f" text-anchor="middle">θ increases →</text>
+      <text x="155" y="221" font-size="9" fill="#7a7060" text-anchor="middle">(moves toward min)</text>
+
+      <!-- ── RIGHT SIDE (slope is POSITIVE) ── -->
+      <!-- Point on right side -->
+      <circle cx="325" cy="216" r="6" fill="#2563a8" stroke="#fff" stroke-width="1.5"/>
+      <text x="338" y="210" font-size="10" fill="#2563a8">start B</text>
+
+      <!-- Tangent on right side: slope is POSITIVE (goes up-right) -->
+      <!-- At x=325, bowl is ascending as x increases, so slope = positive -->
+      <line x1="296" y1="209" x2="356" y2="222" stroke="#9a5c00" stroke-width="1.8"/>
+      <!-- Label -->
+      <text x="360" y="230" font-size="9" fill="#9a5c00">slope = +ve</text>
+      <text x="360" y="242" font-size="9" fill="#9a5c00">(going up-right)</text>
+
+      <!-- Arrow showing θ moves LEFT (decreases) when slope is +ve -->
+      <path d="M317,215 C295,221 265,224 232,225" fill="none" stroke="#2563a8" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arr7)"/>
+      <text x="272" y="210" font-size="9" fill="#2563a8" text-anchor="middle">← θ decreases</text>
+      <text x="272" y="221" font-size="9" fill="#7a7060" text-anchor="middle">(moves toward min)</text>
+
+      <!-- KEY INSIGHT box in top right -->
+      <rect x="415" y="14" width="238" height="210" rx="10" fill="#1a1714" stroke="#1a1714"/>
+      <text x="534" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Why one formula works</text>
+
+      <text x="430" y="58" font-size="10" fill="rgba(255,255,255,0.8)">θ = θ − α · (slope)</text>
+
+      <line x1="425" y1="68" x2="638" y2="68" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+
+      <text x="430" y="86" font-size="10" fill="#f87171">RIGHT side  slope = +ve</text>
+      <text x="430" y="102" font-size="10" fill="rgba(255,255,255,0.7)">θ − α·(+ve)</text>
+      <text x="430" y="118" font-size="10" fill="rgba(255,255,255,0.7)">= θ decreases</text>
+      <text x="430" y="134" font-size="10" fill="#6ee7b7">→ moves LEFT ✓</text>
+
+      <line x1="425" y1="144" x2="638" y2="144" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+
+      <text x="430" y="162" font-size="10" fill="#93c5fd">LEFT side  slope = −ve</text>
+      <text x="430" y="178" font-size="10" fill="rgba(255,255,255,0.7)">θ − α·(−ve)</text>
+      <text x="430" y="194" font-size="10" fill="rgba(255,255,255,0.7)">= θ + something</text>
+      <text x="430" y="210" font-size="10" fill="#6ee7b7">→ moves RIGHT ✓</text>
+    </svg>
+    <p class="diagram-caption">CORRECT: Left side of bowl has NEGATIVE slope, right side has POSITIVE slope. Subtracting the slope always moves θ toward the minimum.</p>
+  </div>
+
+  <h3>The Update Rule — Explained Symbol by Symbol</h3>
+
+  <div class="formula-block">
+    <div class="formula-label">Gradient Descent Update Rule (repeat for all k simultaneously)</div>
+    <div class="formula-text">
+      <span class="hl-blue">θₖ</span> := <span class="hl-blue">θₖ</span> − <span class="hl-yellow">α</span> · <span class="hl-red">∂J(θ)/∂θₖ</span>
+    </div>
+  </div>
+
+  <table class="anno-table" style="margin:16px 0;">
+    <tr><td>θₖ (new)</td><td>Updated parameter value after this step</td></tr>
+    <tr><td>θₖ (old)</td><td>Current parameter value before update</td></tr>
+    <tr><td>α (alpha)</td><td><strong>Learning rate</strong> — how big a step to take. Hyperparameter, set by you, typically 0.01–0.1</td></tr>
+    <tr><td>∂J(θ)/∂θₖ</td><td><strong>Gradient (partial derivative)</strong> — the slope of the cost function at the current θ. Tells direction of steepest climb.</td></tr>
+    <tr><td>Minus sign</td><td>We <em>subtract</em> the gradient because we want to go <em>opposite</em> to it (downhill, not uphill)</td></tr>
+  </table>
+
+  <!-- LEARNING RATE EFFECTS DIAGRAM — interactive JS -->
+  <h3>Learning Rate α — The Critical Hyperparameter</h3>
+
+  <div class="card" style="padding:20px;">
+    <div class="card-label">Interactive: See effect of different learning rates</div>
+    <canvas id="gd-canvas" height="200"></canvas>
+    <div class="range-row">
+      <label>Learning rate (α)</label>
+      <input type="range" id="alpha-slider" min="1" max="100" value="30" oninput="updateGD()">
+      <span class="val" id="alpha-val">0.30</span>
+    </div>
+    <div>
+      <button class="gd-btn" onclick="setAlpha(10)">α too small (0.10)</button>
+      <button class="gd-btn" onclick="setAlpha(30)">α just right (0.30)</button>
+      <button class="gd-btn" onclick="setAlpha(75)">α too large (0.75)</button>
+      <button class="gd-btn outline" onclick="resetGD()">Reset</button>
+    </div>
+    <div id="gd-status" style="font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:12px;"></div>
+  </div>
+
+  <div class="grid3" style="margin-top:16px;">
+    <div class="alert alert-amber" style="flex-direction:column;">
+      <div class="alert-icon">⚠</div>
+      <div><strong>α too small</strong><br>Takes tiny steps. Training is painfully slow. May need thousands of iterations to converge.</div>
+    </div>
+    <div class="alert alert-green" style="flex-direction:column;">
+      <div class="alert-icon">✓</div>
+      <div><strong>α just right</strong><br>Efficient convergence. Steps are well-sized. Reaches minimum smoothly in few iterations.</div>
+    </div>
+    <div class="alert alert-red" style="flex-direction:column;">
+      <div class="alert-icon">✕</div>
+      <div><strong>α too large</strong><br>Overshoots the minimum. Bounces back and forth. May diverge — cost INCREASES instead of decreasing.</div>
+    </div>
+  </div>
+
+  <h3>Step-by-Step Gradient Descent Algorithm</h3>
+  <ul class="step-list">
+    <li><div><span class="step-title">Initialise θ₀ = 0, θ₁ = 0</span><span class="step-desc">Start parameters at zero (or small random values). The algorithm will learn the correct values.</span></div></li>
+    <li><div><span class="step-title">Make predictions using hθ(x)</span><span class="step-desc">For each training example, compute hθ(xⁱ) = θ₀ + θ₁x₁ᵢ using current θ values.</span></div></li>
+    <li><div><span class="step-title">Calculate cost J(θ)</span><span class="step-desc">Compute J(θ) = (1/2m)·Σ(hθ(xⁱ)−yⁱ)². This tells us how wrong we currently are.</span></div></li>
+    <li><div><span class="step-title">Compute gradient ∂J/∂θ</span><span class="step-desc">Calculate partial derivative of J with respect to each θₖ. This is the slope — tells us which direction to step.</span></div></li>
+    <li><div><span class="step-title">Update all θ simultaneously</span><span class="step-desc">θₖ := θₖ − α·∂J/∂θₖ for all k. Update ALL parameters at once, not one at a time.</span></div></li>
+    <li><div><span class="step-title">Repeat until convergence</span><span class="step-desc">Keep looping steps 2–5 until J(θ) stops decreasing meaningfully. This is the "convergence theorem" — for properly chosen α, guaranteed to reach minimum.</span></div></li>
+  </ul>
+
+  <!-- FULL CONVERGENCE DIAGRAM -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 110" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Iteration boxes -->
+      <rect x="10"  y="30" width="95" height="50" rx="7" fill="#f5f2ec" stroke="#c84b2f" stroke-width="1"/>
+      <text x="57"  y="52" text-anchor="middle" font-size="10" fill="#c84b2f" font-weight="600">Initialise</text>
+      <text x="57"  y="66" text-anchor="middle" font-size="9" fill="#7a7060">θ₀=θ₁=0</text>
+
+      <line x1="105" y1="55" x2="123" y2="55" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr8)"/>
+
+      <rect x="124" y="30" width="95" height="50" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="171" y="52" text-anchor="middle" font-size="10" fill="#3d3830" font-weight="600">Predict</text>
+      <text x="171" y="66" text-anchor="middle" font-size="9" fill="#7a7060">hθ(x)</text>
+
+      <line x1="219" y1="55" x2="237" y2="55" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr8)"/>
+
+      <rect x="238" y="30" width="95" height="50" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="285" y="52" text-anchor="middle" font-size="10" fill="#3d3830" font-weight="600">Cost J(θ)</text>
+      <text x="285" y="66" text-anchor="middle" font-size="9" fill="#7a7060">MSE</text>
+
+      <line x1="333" y1="55" x2="351" y2="55" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr8)"/>
+
+      <rect x="352" y="30" width="95" height="50" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="399" y="52" text-anchor="middle" font-size="10" fill="#3d3830" font-weight="600">Gradient</text>
+      <text x="399" y="66" text-anchor="middle" font-size="9" fill="#7a7060">∂J/∂θ</text>
+
+      <line x1="447" y1="55" x2="465" y2="55" stroke="#7a7060" stroke-width="1.2" marker-end="url(#arr8)"/>
+
+      <rect x="466" y="30" width="95" height="50" rx="7" fill="#1a7a4a" stroke="#1a7a4a"/>
+      <text x="513" y="52" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Update θ</text>
+      <text x="513" y="66" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.8)">θ−α·∂J/∂θ</text>
+
+      <!-- Loop back arrow -->
+      <path d="M561,55 Q610,55 610,16 Q610,6 580,6 L200,6 Q160,6 160,30" fill="none" stroke="#c84b2f" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr8)"/>
+      <text x="580" y="98" text-anchor="middle" font-size="9" fill="#c84b2f">repeat until</text>
+      <text x="580" y="109" text-anchor="middle" font-size="9" fill="#c84b2f">J(θ) converges</text>
+    </svg>
+    <p class="diagram-caption">Gradient descent is a loop: predict → measure error → find slope → update parameters → repeat</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 9 — IMPLEMENTATION
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Implementation — Insurance Dataset</h2>
+  </div>
+
+  <div class="alert alert-blue">
+    <span class="alert-icon">◆</span>
+    <div>We predict <strong>insurance charges</strong> from features: age, sex, BMI, smoker status, region. This is a <em>regression problem</em> — predicting a continuous numeric output.</div>
+  </div>
+
+  <h3>Step 1: Load &amp; Explore Data</h3>
+  <pre class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+
+<span class="cm"># Load dataset</span>
+insurance_data = pd.<span class="fn">read_csv</span>(<span class="st">"insurance.csv"</span>)
+insurance_data.<span class="fn">head</span>()
+
+<span class="cm"># Visualise relationship between BMI and charges</span>
+sns.<span class="fn">scatterplot</span>(
+    x=insurance_data[<span class="st">"bmi"</span>],
+    y=insurance_data[<span class="st">"charges"</span>],
+    hue=insurance_data[<span class="st">"smoker"</span>]  <span class="cm"># color by smoker</span>
+)</pre>
+
+  <h3>Step 2: Feature Engineering (Encode Categorical)</h3>
+  <pre class="code-block"><span class="cm"># Features (X) = everything except charges and region</span>
+X = insurance_data.<span class="fn">drop</span>(columns=[<span class="st">"charges"</span>, <span class="st">"region"</span>])
+y = insurance_data[<span class="st">"charges"</span>]
+
+<span class="cm"># Encode: convert text categories to numbers</span>
+<span class="cm"># ML models need numbers, not "male"/"female" strings</span>
+X[<span class="st">"sex"</span>]    = X[<span class="st">"sex"</span>].<span class="fn">map</span>({<span class="st">"female"</span>: <span class="nr">1</span>, <span class="st">"male"</span>: <span class="nr">0</span>})
+X[<span class="st">"smoker"</span>] = X[<span class="st">"smoker"</span>].<span class="fn">map</span>({<span class="st">"yes"</span>: <span class="nr">1</span>, <span class="st">"no"</span>: <span class="nr">0</span>})</pre>
+
+  <h3>Step 3: Train–Test Split</h3>
+  <pre class="code-block"><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+<span class="cm"># Split: 80% train, 20% test, random_state for reproducibility</span>
+X_train, X_test, y_train, y_test = <span class="fn">train_test_split</span>(
+    X, y,
+    test_size=<span class="nr">0.2</span>,        <span class="cm"># 20% for testing</span>
+    random_state=<span class="nr">42</span>      <span class="cm"># reproducible split</span>
+)
+
+X_train.<span class="fn">head</span>()    <span class="cm"># check training features</span>
+X_test.<span class="fn">head</span>()     <span class="cm"># check test features</span></pre>
+
+  <h3>Step 4: Train the Model</h3>
+  <pre class="code-block"><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression
+
+model = <span class="fn">LinearRegression</span>()
+model.<span class="fn">fit</span>(X_train, y_train)
+<span class="cm"># model.fit() runs gradient descent internally</span>
+<span class="cm"># After fit, model has learned θ₀, θ₁...θₙ</span></pre>
+
+  <h3>Step 5: Predict</h3>
+  <pre class="code-block"><span class="cm"># Predict on test set (unseen data)</span>
+y_pred = model.<span class="fn">predict</span>(X_test)
+<span class="cm"># y_pred = hθ(X_test) = θ₀ + θ₁x₁ + θ₂x₂ + ...</span></pre>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 10 — EVALUATION METRICS
+═══════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Evaluation Metrics</h2>
+  </div>
+
+  <p>After predicting, we need to measure <em>how good</em> our model is. Different metrics highlight different aspects of error.</p>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 160" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- MAE -->
+      <rect x="10" y="14" width="195" height="130" rx="10" fill="#f5f2ec" stroke="#6b3fa0" stroke-width="1.5"/>
+      <text x="107" y="38" text-anchor="middle" font-size="12" font-weight="600" fill="#6b3fa0">MAE</text>
+      <text x="107" y="52" text-anchor="middle" font-size="9" fill="#7a7060">Mean Absolute Error</text>
+      <text x="107" y="78" text-anchor="middle" font-size="13" fill="#1a1714" font-weight="600">1/n · Σ|yᵢ−ŷᵢ|</text>
+      <line x1="30" y1="92" x2="185" y2="92" stroke="#d1cbbf" stroke-width="0.8"/>
+      <text x="107" y="108" text-anchor="middle" font-size="10" fill="#3d3830">Average of absolute</text>
+      <text x="107" y="122" text-anchor="middle" font-size="10" fill="#3d3830">errors — easy to</text>
+      <text x="107" y="136" text-anchor="middle" font-size="10" fill="#3d3830">understand, robust</text>
+
+      <!-- MSE -->
+      <rect x="233" y="14" width="195" height="130" rx="10" fill="#f5f2ec" stroke="#c84b2f" stroke-width="1.5"/>
+      <text x="330" y="38" text-anchor="middle" font-size="12" font-weight="600" fill="#c84b2f">MSE</text>
+      <text x="330" y="52" text-anchor="middle" font-size="9" fill="#7a7060">Mean Squared Error</text>
+      <text x="330" y="78" text-anchor="middle" font-size="13" fill="#1a1714" font-weight="600">1/n · Σ(yᵢ−ŷᵢ)²</text>
+      <line x1="253" y1="92" x2="408" y2="92" stroke="#d1cbbf" stroke-width="0.8"/>
+      <text x="330" y="108" text-anchor="middle" font-size="10" fill="#3d3830">Punishes large errors</text>
+      <text x="330" y="122" text-anchor="middle" font-size="10" fill="#3d3830">heavily — sensitive to</text>
+      <text x="330" y="136" text-anchor="middle" font-size="10" fill="#3d3830">outliers</text>
+
+      <!-- RMSE -->
+      <rect x="456" y="14" width="195" height="130" rx="10" fill="#f5f2ec" stroke="#2563a8" stroke-width="1.5"/>
+      <text x="553" y="38" text-anchor="middle" font-size="12" font-weight="600" fill="#2563a8">RMSE</text>
+      <text x="553" y="52" text-anchor="middle" font-size="9" fill="#7a7060">Root Mean Squared Error</text>
+      <text x="553" y="78" text-anchor="middle" font-size="13" fill="#1a1714" font-weight="600">√MSE</text>
+      <line x1="476" y1="92" x2="631" y2="92" stroke="#d1cbbf" stroke-width="0.8"/>
+      <text x="553" y="108" text-anchor="middle" font-size="10" fill="#3d3830">Same unit as output</text>
+      <text x="553" y="122" text-anchor="middle" font-size="10" fill="#3d3830">Most interpretable —</text>
+      <text x="553" y="136" text-anchor="middle" font-size="10" fill="#3d3830">use this for reporting</text>
+    </svg>
+    <p class="diagram-caption">Three error metrics — use RMSE for reporting (same units as target), MSE for training (differentiable)</p>
+  </div>
+
+  <h3>R² Score — Coefficient of Determination</h3>
+
+  <div class="definition-box">
+    <strong>R²</strong> measures what fraction of the variance in Y your model explains. Range: 0 to 1. R²=1 = perfect predictions. R²=0 = model is no better than just predicting the mean.
+  </div>
+
+  <div class="formula-block">
+    <div class="formula-label">R-Squared Formula</div>
+    <div class="formula-text">
+      <span class="hl-blue">R²</span> = 1 − <span class="hl-red">Σ(yᵢ − ŷᵢ)²</span> / <span class="hl-green">Σ(yᵢ − ȳ)²</span>
+    </div>
+  </div>
+
+  <table class="anno-table" style="margin:16px 0;">
+    <tr><td>Σ(yᵢ − ŷᵢ)²</td><td><strong>Residual SS</strong> — sum of squared errors from our MODEL. How wrong our model is.</td></tr>
+    <tr><td>Σ(yᵢ − ȳ)²</td><td><strong>Total SS</strong> — sum of squared errors from the MEAN baseline. If we just predicted the average every time.</td></tr>
+    <tr><td>R² = 1</td><td>Model residual = 0 → perfect fit. Every prediction is exact.</td></tr>
+    <tr><td>R² = 0</td><td>Model is as good as just predicting the mean — learned nothing.</td></tr>
+    <tr><td>R² &lt; 0</td><td>Model is WORSE than predicting the mean — very bad model.</td></tr>
+  </table>
+
+  <div class="intuition-box">
+    <div class="tag">Intuition</div>
+    <p style="margin:0;font-size:14.5px;">R² = "What percentage of the variation in Y did our model successfully explain?" R²=0.85 means the model explains 85% of why charges vary between customers. The remaining 15% is unexplained (other factors).</p>
+  </div>
+
+  <h3>Adjusted R² — Penalises Useless Features</h3>
+
+  <div class="alert alert-amber">
+    <span class="alert-icon">⚠</span>
+    <div><strong>Problem with R²:</strong> Adding more features always increases R², even if the feature is useless (random noise). So R² can be gamed by just adding more columns.</div>
+  </div>
+
+  <div class="formula-block">
+    <div class="formula-label">Adjusted R-Squared</div>
+    <div class="formula-text">
+      <span class="hl-blue">Adj. R²</span> = 1 − <span class="hl-yellow">(1−R²)</span> · <span class="hl-red">(n−1)</span> / <span class="hl-green">(n−p−1)</span>
+    </div>
+  </div>
+
+  <table class="anno-table" style="margin:16px 0;">
+    <tr><td>n</td><td>Number of rows (training examples)</td></tr>
+    <tr><td>p</td><td>Number of features (independent variables)</td></tr>
+    <tr><td>R²</td><td>Regular R-squared score</td></tr>
+    <tr><td>When p ↑</td><td>(n−p−1) decreases → penalty increases → Adj. R² decreases if the new feature didn't actually help</td></tr>
+  </table>
+
+  <h3>Implementation</h3>
+  <pre class="code-block"><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> r2_score
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Basic metrics</span>
+mae  = np.<span class="fn">mean</span>(np.<span class="fn">abs</span>(y_test - y_pred))
+mse  = np.<span class="fn">mean</span>((y_test - y_pred)**<span class="nr">2</span>)
+rmse = np.<span class="fn">sqrt</span>(mse)
+r2   = <span class="fn">r2_score</span>(y_test, y_pred)
+
+<span class="cm"># Adjusted R²</span>
+n = X_test.<span class="fn">shape</span>[<span class="nr">0</span>]    <span class="cm"># number of rows</span>
+p = X_test.<span class="fn">shape</span>[<span class="nr">1</span>]    <span class="cm"># number of features</span>
+adjusted_r2 = <span class="nr">1</span> - ((<span class="nr">1</span> - r2) * (n - <span class="nr">1</span>) / (n - p - <span class="nr">1</span>))
+
+<span class="fn">print</span>(<span class="st">f"MAE:          {mae:.2f}"</span>)
+<span class="fn">print</span>(<span class="st">f"MSE:          {mse:.2f}"</span>)
+<span class="fn">print</span>(<span class="st">f"RMSE:         {rmse:.2f}"</span>)
+<span class="fn">print</span>(<span class="st">f"R²:           {r2:.4f}"</span>)
+<span class="fn">print</span>(<span class="st">f"Adjusted R²:  {adjusted_r2:.4f}"</span>)</pre>
+
+  <!-- Final summary diagram -->
+  <h3>Complete Linear Regression Pipeline</h3>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 130" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <defs>
+        <marker id="arr9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <rect x="10"  y="20" width="88" height="54" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="54"  y="44" text-anchor="middle" font-size="10" font-weight="600" fill="#1a1714">Raw Data</text>
+      <text x="54"  y="58" text-anchor="middle" font-size="9" fill="#7a7060">CSV file</text>
+      <line x1="98" y1="47" x2="116" y2="47" stroke="#7a7060" stroke-width="1" marker-end="url(#arr9)"/>
+
+      <rect x="117" y="20" width="88" height="54" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="161" y="40" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1a1714">Feature</text>
+      <text x="161" y="53" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1a1714">Engineering</text>
+      <text x="161" y="66" text-anchor="middle" font-size="9" fill="#7a7060">encode/scale</text>
+      <line x1="205" y1="47" x2="223" y2="47" stroke="#7a7060" stroke-width="1" marker-end="url(#arr9)"/>
+
+      <rect x="224" y="20" width="88" height="54" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="268" y="40" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1a1714">Train/Test</text>
+      <text x="268" y="53" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1a1714">Split</text>
+      <text x="268" y="66" text-anchor="middle" font-size="9" fill="#7a7060">80/20</text>
+      <line x1="312" y1="47" x2="330" y2="47" stroke="#7a7060" stroke-width="1" marker-end="url(#arr9)"/>
+
+      <rect x="331" y="20" width="88" height="54" rx="7" fill="#c84b2f" stroke="#c84b2f"/>
+      <text x="375" y="40" text-anchor="middle" font-size="9.5" font-weight="600" fill="#fff">model.fit(</text>
+      <text x="375" y="53" text-anchor="middle" font-size="9.5" font-weight="600" fill="#fff">X_train,y)</text>
+      <text x="375" y="66" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">GD inside</text>
+      <line x1="419" y1="47" x2="437" y2="47" stroke="#7a7060" stroke-width="1" marker-end="url(#arr9)"/>
+
+      <rect x="438" y="20" width="88" height="54" rx="7" fill="#f5f2ec" stroke="#7a7060" stroke-width="0.8"/>
+      <text x="482" y="44" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1a1714">predict(</text>
+      <text x="482" y="57" text-anchor="middle" font-size="9.5" fill="#7a7060">X_test)</text>
+      <line x1="526" y1="47" x2="544" y2="47" stroke="#7a7060" stroke-width="1" marker-end="url(#arr9)"/>
+
+      <rect x="545" y="20" width="106" height="54" rx="7" fill="#1a7a4a" stroke="#1a7a4a"/>
+      <text x="598" y="40" text-anchor="middle" font-size="9.5" font-weight="600" fill="#fff">Evaluate</text>
+      <text x="598" y="53" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.8)">MAE/MSE/</text>
+      <text x="598" y="66" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.8)">RMSE/R²</text>
+
+      <text x="330" y="106" text-anchor="middle" font-size="10" fill="#7a7060">model.fit() internally uses Gradient Descent to learn optimal θ₀, θ₁...θₙ values</text>
+    </svg>
+    <p class="diagram-caption">Complete sklearn pipeline for Linear Regression</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:60px;padding:32px 0;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+  <div>
+    <div style="font-family:var(--display);font-size:1.2rem;font-weight:800;color:var(--ink);">Machine Learning Notes</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:4px;">Linear Regression · Cost Function · Gradient Descent · Evaluation</div>
+  </div>
+  <div style="font-family:var(--mono);font-size:11px;color:var(--ink3);">Ready for revision ✓</div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<!-- INTERACTIVE GRADIENT DESCENT CANVAS SCRIPT -->
+<script>
+const canvas = document.getElementById('gd-canvas');
+const ctx = canvas.getContext('2d');
+let alpha = 0.30;
+let stepHistory = [];
+let animFrame;
+
+function getAlpha(){ return parseFloat(document.getElementById('alpha-slider').value) / 100; }
+
+// Cost function: J(theta) = (theta - 3)^2  (simple bowl, minimum at theta=3)
+function J(t){ return (t - 3) * (t - 3); }
+function dJ(t){ return 2 * (t - 3); }
+
+function drawScene(steps){
+  const W = canvas.offsetWidth, H = 200;
+  canvas.width = W * window.devicePixelRatio;
+  canvas.height = H * window.devicePixelRatio;
+  canvas.style.height = H + 'px';
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.clearRect(0,0,W,H);
+
+  const pad = {l:50,r:30,t:20,b:40};
+  const tMin = -1, tMax = 7;
+  const jMin = 0,  jMax = 16;
+  const tx = t => pad.l + (t-tMin)/(tMax-tMin)*(W-pad.l-pad.r);
+  const ty = j => H - pad.b - (j-jMin)/(jMax-jMin)*(H-pad.t-pad.b);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(0,0,0,0.06)'; ctx.lineWidth = 0.8;
+  for(let g=0;g<=16;g+=4){
+    ctx.beginPath(); ctx.moveTo(pad.l,ty(g)); ctx.lineTo(W-pad.r,ty(g)); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = '#1a1714'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#7a7060'; ctx.font='11px IBM Plex Mono, monospace';
+  ctx.fillText('θ', W-pad.r+4, H-pad.b+4);
+  ctx.fillText('J(θ)', 4, pad.t+10);
+  ctx.fillText('0',tx(0)-4,H-pad.b+14);
+  ctx.fillText('3',tx(3)-4,H-pad.b+14);
+  ctx.fillText('6',tx(6)-4,H-pad.b+14);
+
+  // Bowl curve
+  ctx.beginPath(); ctx.strokeStyle='#1a1714'; ctx.lineWidth=2;
+  for(let t=tMin;t<=tMax;t+=0.05){
+    const x=tx(t), y=ty(J(t));
+    t===tMin ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // Minimum marker
+  ctx.fillStyle='#1a7a4a';
+  ctx.beginPath(); ctx.arc(tx(3),ty(0),6,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1a7a4a'; ctx.font='10px IBM Plex Mono';
+  ctx.fillText('min',tx(3)-12,ty(0)+18);
+
+  // Draw steps
+  if(steps.length>0){
+    for(let i=0;i<steps.length-1;i++){
+      const x1=tx(steps[i]),y1=ty(J(steps[i]));
+      const x2=tx(steps[i+1]),y2=ty(J(steps[i+1]));
+      ctx.strokeStyle='rgba(200,75,47,0.5)'; ctx.lineWidth=1.2;
+      ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    steps.forEach((t,i)=>{
+      const x=tx(t), y=ty(J(t));
+      ctx.fillStyle = i===0 ? '#2563a8' : (i===steps.length-1 ? '#c84b2f' : 'rgba(200,75,47,0.7)');
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(x,y,i===0?6:4,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      if(i===0){ ctx.fillStyle='#2563a8'; ctx.font='10px IBM Plex Mono'; ctx.fillText('start',x-14,y-10); }
+    });
+  }
+}
+
+function runGD(){
+  clearInterval(animFrame);
+  const a = getAlpha();
+  document.getElementById('alpha-val').textContent = a.toFixed(2);
+  let theta = 0.3; // start left of minimum
+  stepHistory = [theta];
+  let iter = 0;
+  const maxIter = 30;
+  const status = document.getElementById('gd-status');
+
+  animFrame = setInterval(()=>{
+    if(iter >= maxIter || Math.abs(dJ(theta)) < 0.001){
+      clearInterval(animFrame);
+      let msg = '';
+      if(a > 0.6) msg = '⚠ α too large — overshooting! Cost may not decrease.';
+      else if(a < 0.15) msg = '⚠ α too small — converging very slowly.';
+      else msg = '✓ Good α — smooth convergence to minimum.';
+      status.textContent = `Stopped at θ = ${theta.toFixed(3)}, J(θ) = ${J(theta).toFixed(3)}. ${msg}`;
+      return;
+    }
+    theta = theta - a * dJ(theta);
+    if(theta > 20 || theta < -15){ clearInterval(animFrame); status.textContent='✕ Diverged! α is too large.'; return; }
+    stepHistory.push(theta);
+    drawScene(stepHistory);
+    iter++;
+  }, 120);
+}
+
+function updateGD(){ document.getElementById('alpha-val').textContent = getAlpha().toFixed(2); runGD(); }
+function setAlpha(v){ document.getElementById('alpha-slider').value = v; updateGD(); }
+function resetGD(){ clearInterval(animFrame); stepHistory=[]; drawScene([]); document.getElementById('gd-status').textContent=''; }
+
+window.addEventListener('load', ()=>{ drawScene([]); runGD(); });
+window.addEventListener('resize', ()=>{ drawScene(stepHistory); });
+
+// Sidebar active state
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', ()=>{
+  let current = '';
+  sections.forEach(s=>{ if(window.scrollY >= s.offsetTop - 120) current = s.id; });
+  navLinks.forEach(l=>{ l.classList.toggle('active', l.getAttribute('href')==='#'+current); });
+});
+</script>
+
+<!-- Fixed corner watermark badge -->
+<a href="https://www.linkedin.com/in/sonu-saini-here" target="_blank" rel="noopener" class="watermark-fixed" title="Notes by Sonu Saini">
+  <span class="wm-icon">
+    <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.35-1.85 3.58 0 4.25 2.36 4.25 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+    </svg>
+  </span>
+  <span class="wm-text">
+    <span class="wm-name">Sonu Saini</span>
+    <span class="wm-handle">sonu-saini-here</span>
+  </span>
+</a>
+
+<!-- Diagonal repeating watermark -->
+<div class="watermark-page" aria-hidden="true" id="wm-page"></div>
+<script>
+(function(){
+  const container = document.getElementById("wm-page");
+  const label = "Sonu Saini  ·  linkedin.com/in/sonu-saini-here";
+  const cols = 3, rows = 9;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const el = document.createElement("div");
+      el.className = "watermark-page-text";
+      el.textContent = label;
+      el.style.left = (c * 420 + 60) + "px";
+      el.style.top  = (r * 130 - 20) + "px";
+      container.appendChild(el);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
